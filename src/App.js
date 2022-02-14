@@ -5,6 +5,9 @@ import { renderRoutes } from 'react-router-config';
 
 // 引入功能性
 import routes from './router';
+import store from './store'
+import { Provider } from 'react-redux';
+
 
 // 自定义
 import BeiAppHeader from '@/components/app-header';
@@ -13,10 +16,12 @@ import { HashRouter } from 'react-router-dom';
 
 export default memo(function App() {
     return (
-        <HashRouter>
-            <BeiAppHeader />
-            {renderRoutes(routes)}
-            <BeiAppFooter />
-        </HashRouter>
+        <Provider store={store}>
+            <HashRouter>
+                <BeiAppHeader />
+                {renderRoutes(routes)}
+                <BeiAppFooter />
+            </HashRouter>
+        </Provider>
     )
 });
