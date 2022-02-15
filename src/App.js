@@ -13,6 +13,7 @@ import { Provider } from 'react-redux';
 import BeiAppHeader from '@/components/app-header';
 import BeiAppFooter from '@/components/app-footer';
 import { HashRouter } from 'react-router-dom';
+import BeiAppPlayerBar from './pages/player/app-player-bar';
 
 export default memo(function App() {
     return (
@@ -21,6 +22,7 @@ export default memo(function App() {
                 <BeiAppHeader />
                 {renderRoutes(routes)}
                 <BeiAppFooter />
+                <BeiAppPlayerBar />
             </HashRouter>
         </Provider>
     )

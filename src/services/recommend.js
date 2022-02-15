@@ -24,11 +24,11 @@ export function getNewAlbums(limit) {
     })
 }
 
-export function getTopList(idx) {
+export function getTopList(id) {
     return request({
-        url: "/top/list",
+        url: "/playlist/detail",
         params: {
-            idx
+            id
         }
     })
 }

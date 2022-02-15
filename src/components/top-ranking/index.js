@@ -14,7 +14,7 @@ const BeiTopRanking = memo((props) => {
             <div className="header">
                 <div className="image">
                     <img src={getSizeImage(info.coverImgUrl)} alt="" />
-                    <a href="/todo" className='image-cover'></a>
+                    <a href="/todo" className='image_cover'>ranking</a>
                 </div>
                 <div className="info">
                     <a href="/todo">{info.name}</a>
@@ -31,7 +31,7 @@ const BeiTopRanking = memo((props) => {
                             <div key={item.id} className="list-item">
                                 <div className="rank">{index + 1}</div>
                                 <div className="info">
-                                    <span className="name text-nowrap">{item.name}</span>
+                                    <span className="name text-nowrap">{item.al.name}</span>
                                     <div className="operate">
                                         <button className="btn sprite_02 play"></button>
                                         <button className="btn sprite_icon2 addto"></button>

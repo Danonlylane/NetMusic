@@ -1,8 +1,11 @@
 import React, { memo } from 'react'
+import BeiHotAnchor from './c-cpns/hot-anchor';
 import BeiHotRecommend from './c-cpns/hot-recommend';
 import BeiNewAlbum from './c-cpns/new-album';
 import BeiRecommendRanking from './c-cpns/recommend-ranking';
+import BeiSettleSinger from './c-cpns/settle-singer';
 import BeiTopBanner from './c-cpns/top-banner';
+import BeiUserLogin from './c-cpns/user-login';
 
 import {
     RecommendWrapper,
@@ -23,7 +26,9 @@ function BeiRecommend(props) {
                     <BeiRecommendRanking />
                 </RecommendLeft>
                 <RecommendRight>
-
+                    <BeiUserLogin />
+                    <BeiSettleSinger />
+                    <BeiHotAnchor />
                 </RecommendRight>
             </Content>
         </RecommendWrapper>
