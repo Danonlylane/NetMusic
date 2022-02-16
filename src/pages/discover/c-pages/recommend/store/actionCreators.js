@@ -71,15 +71,15 @@ export const getTopListAction = (idx) => {
             switch (idx) {
                 case 19723756:
                     dispatch(changeUpRankingAction(res));
-                    console.log(res);
+                    // console.log(res);
                     break;
                 case 3779629:
                     dispatch(changeNewRankingAction(res));
-                    console.log(res);
+                    // console.log(res);
                     break;
                 case 2884035:
                     dispatch(changeOriginRankingAction(res));
-                    console.log(res);
+                    // console.log(res);
                     break;
                 default:
             }

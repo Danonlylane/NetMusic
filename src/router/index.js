@@ -14,6 +14,7 @@ import BeiSongs from '../pages/discover/c-pages/songs';
 import BeiDjRadio from '../pages/discover/c-pages/djradio/index';
 import BeiArtist from '../pages/discover/c-pages/artist/index';
 import BeiAlbum from '../pages/discover/c-pages/album/index';
+import BeiPlayer from '../pages/player';
 
 
 const routes = [
@@ -59,6 +60,10 @@ const routes = [
             {
                 path: "/discover/album",
                 component: BeiAlbum
+            },
+            {
+                path: "/discover/player",
+                component: BeiPlayer
             },
         ]
     },
