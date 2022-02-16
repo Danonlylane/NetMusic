@@ -1,5 +1,5 @@
 // 引入外部
-import React, { memo } from 'react';
+import React, { memo, Suspense } from 'react';
 import { renderRoutes } from 'react-router-config';
 
 
@@ -20,7 +20,9 @@ export default memo(function App() {
         <Provider store={store}>
             <HashRouter>
                 <BeiAppHeader />
-                {renderRoutes(routes)}
+                <Suspense fallback={<div>page loading</div>}>
+                    {renderRoutes(routes)}
+                </Suspense>
                 <BeiAppFooter />
                 <BeiAppPlayerBar />
             </HashRouter>
