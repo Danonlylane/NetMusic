@@ -17,7 +17,9 @@ export function getHotRecommends(limit) {
 
 export function getNewAlbums(limit) {
     return request({
-        url: "/top/album",
+        // 22.02.22日，发现接口已经改变
+        // url: "/top/album",
+        url: "/album/newest",
         params: {
             limit
         }
@@ -27,8 +29,29 @@ export function getNewAlbums(limit) {
 export function getTopList(id) {
     return request({
         url: "/playlist/detail",
+        // url: "/top/list",
         params: {
             id
+        }
+    })
+}
+
+export function getArtistList(limit, cat) {
+    return request({
+        url: "/artist/list",
+        params: {
+            cat,
+            limit
+        }
+    })
+}
+
+
+export function getHotRadio(limit) {
+    return request({
+        url: "/dj/toplist/popular",
+        params: {
+            limit
         }
     })
 }

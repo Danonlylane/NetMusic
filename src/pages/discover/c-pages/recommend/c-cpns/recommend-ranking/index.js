@@ -20,6 +20,9 @@ const BeiRecommendRanking = memo(() => {
         dispatch(getTopListAction(19723756));
         dispatch(getTopListAction(3779629));
         dispatch(getTopListAction(2884035));
+        // dispatch(getTopListAction(0));
+        // dispatch(getTopListAction(2));
+        // dispatch(getTopListAction(3));
     }, [dispatch])
 
     return (

@@ -5,8 +5,20 @@ import { getNewAlbums } from '@/services/recommend';
 import {
     getTopBanners,
     getHotRecommends,
-    getTopList
+    getTopList,
+    getArtistList,
+    getHotRadio,
 } from '@/services/recommend';
+
+const changeHotRadioAction = (res) => ({
+    type: actionTypes.CHANGE_HOT_RADIO,
+    hotRadios: res.data.list
+})
+
+const changeSettleSingsAction = (res) => ({
+    type: actionTypes.CHANGE_SETTLE_SONGER,
+    settleSings: res.artists
+})
 
 const changeTopBannerAction = (res) => ({
     type: actionTypes.CHANGE_TOP_BANNERS,
@@ -82,7 +94,27 @@ export const getTopListAction = (idx) => {
                     // console.log(res);
                     break;
                 default:
+                    console.log("其他数据处理");
             }
         });
+    }
+}
+
+export const getSettleSingers = () => {
+    return dispath => {
+        getArtistList(5, 5001).then(res => {
+            // console.log(res);
+            dispath(changeSettleSingsAction(res))
+        })
+    }
+}
+
+
+export const getHotRadioAction = () => {
+    return dispatch => {
+        getHotRadio(5).then(res => {
+            console.log(res);
+            dispatch(changeHotRadioAction(res))
+        })
     }
 }

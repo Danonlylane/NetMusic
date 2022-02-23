@@ -26,7 +26,9 @@ export default memo(function BeiSongsCover(props) {
                 {info.name}
             </div>
             <div className="cover-source text-nowrap">
-                by {info.copywriter || info.creator.nickname}
+                {/* 取消了这个接口的nickname数据 */}
+                {/* by {info.copywriter || info.creator.nickname} */}
+                by 热门推荐
             </div>
         </SongsCoverWrapper>
     )

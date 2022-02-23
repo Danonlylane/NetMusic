@@ -1,5 +1,6 @@
 import React, { memo } from 'react'
-import BeiHotAnchor from './c-cpns/hot-anchor';
+import BeiHotRadio from './c-cpns/hot-radio';
+// import BeiHotAnchor from './c-cpns/hot-anchor';
 import BeiHotRecommend from './c-cpns/hot-recommend';
 import BeiNewAlbum from './c-cpns/new-album';
 import BeiRecommendRanking from './c-cpns/recommend-ranking';
@@ -28,7 +29,7 @@ function BeiRecommend(props) {
                 <RecommendRight>
                     <BeiUserLogin />
                     <BeiSettleSinger />
-                    <BeiHotAnchor />
+                    <BeiHotRadio />
                 </RecommendRight>
             </Content>
         </RecommendWrapper>
