@@ -9,6 +9,7 @@ import App from './App';
 
 // 配置了别名之后
 import "@/assets/css/reset.css";
+import '@/assets/css/component.css'
 
 ReactDOM.render(
   <App />,

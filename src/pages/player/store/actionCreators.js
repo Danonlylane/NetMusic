@@ -109,3 +109,25 @@ export const getLyricAction = (id) => {
     })
   }
 }
+
+
+// // 获取歌曲详情用于添加到播放列表
+// export const getAddSongDetailAction = (id) => {
+//   return (dispatch, getState) => {
+//     getSongDetail(id).then((res) => {
+//       // (0)歌曲ID添加到本地存储
+//       addPlaylistId(id)
+//       const playList = getState().getIn(['player', 'playList'])
+//       // 先判断是已经存在播放列表,如果不存在,再进行添加
+//       const songIndex = playList.findIndex((song) => song.id === id)
+//       if (songIndex !== -1) return // 找到了(后续不再执行)
+//       // 获取要添加播放的歌曲信息
+//       const willAddSong = res.songs && res.songs[0]
+//       // 添加到播放列表
+//       playList.push(willAddSong)
+//       // 派发action
+//       dispatch(changePlayListAction(playList))
+//       dispatch(changePlayListCount(playList.length))
+//     })
+//   }
+// }

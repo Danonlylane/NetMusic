@@ -50,3 +50,55 @@ export function formatMinuteSecond(time) {
 export function getPlaySong(id) {
   return `https://music.163.com/song/media/outer/url?id=${id}.mp3`;
 }
+
+// 函数防抖: 解决refresh频繁刷新
+export function debounce(func, delay) {
+  let timer = null
+  return function (...args) {
+    if (timer) clearInterval(timer)
+    timer = setTimeout(() => {
+      func.apply(this, args)
+    }, delay)
+  }
+}
+
+/**
+ * 格式化时间
+ * @param str
+ * @returns {string}
+ * {y}-{m}-{d} {h}:{i}:{s}
+ */
+ export function parseTime(time, cFormat) {
+  if (!time || arguments.length === 0) return null
+  const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+  let date
+  if (typeof time === 'object') {
+    date = time
+  } else {
+    if (`${time}`.length === 10) time = parseInt(time, 10) * 1000
+    date = new Date(time)
+  }
+  const formatObj = {
+    y: date.getFullYear(),
+    m: date.getMonth() + 1,
+    d: date.getDate(),
+    h: date.getHours(),
+    i: date.getMinutes(),
+    s: date.getSeconds(),
+    a: date.getDay(),
+  }
+  // eslint-disable-next-line camelcase
+  const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
+    let value = formatObj[key]
+    // Note: getDay() returns 0 on Sunday
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value]
+    }
+    if (result.length > 0 && value < 10) {
+      value = `0${value}`
+    }
+    return value || 0
+  })
+  // eslint-disable-next-line camelcase
+  return time_str
+}

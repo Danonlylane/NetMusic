@@ -252,3 +252,41 @@ export const artistCategories = [
         ]
     },
 ]
+
+// 搜索分类
+export const searchCategories = [
+    // '单曲', '歌手', '专辑', '视频', '歌词', '歌单', '主播电台', '用户'
+    {
+        title: '单曲',
+        link: '/search/single?type=1',
+    },
+    {
+        title: '歌手',
+        link: '/search/singer?type=100',
+    },
+    // {
+    //   title: '专辑',
+    //   link: '/search/album?type=11',
+    // },
+    // {
+    //   title: '视频',
+    //   link: '/search/video?type=12',
+    // },
+    // {
+    //   title: '歌词',
+    //   link: '/search/artist?type=13',
+    // },
+    // {
+    //   title: '歌单',
+    //   link: '/search/songs?type=14',
+    // },
+    // {
+    //   title: '主播电台',
+    //   link: '/search/dj?type=15',
+    // },
+    // {
+    //   title: '用户',
+    //   link: '/search/user?type=16',
+    // }
+]
+

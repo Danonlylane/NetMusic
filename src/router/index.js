@@ -25,6 +25,12 @@ const BeiPlayer = React.lazy(_ => import("../pages/player"));
 const BeiFriend = React.lazy(_ => import("../pages/friend"));
 const BeiMine = React.lazy(_ => import("../pages/mine"));
 
+const BeiSearch = React.lazy(_ => import("../pages/search"));
+// const BeiSearchAlbum = React.lazy(_ => import("../pages/search/child-pages/album"));
+const BeiSingle = React.lazy(_ => import("../pages/search/child-pages/single"));
+const BeiSinger = React.lazy(_ => import("../pages/search/child-pages/singer"));
+
+// const BeiSonglist = React.lazy(_ => import("../pages/song-detail"))
 
 const routes = [
     {
@@ -84,6 +90,24 @@ const routes = [
         path: "/friend",
         component: BeiFriend,
     },
+    {
+        path: '/search',
+        component: BeiSearch,
+        routes: [
+            {
+                path: '/search',
+                exact: true,
+                render: () => <Redirect to="/search/single?song=&type=1" />,
+            },
+            { path: '/search/single', component: BeiSingle },
+            { path: '/search/singer', component: BeiSinger },
+        ],
+    },
+    // {
+    //     path: '/songlist',
+    //     exact: true,
+    //     component: BeiSonglist,
+    // },
 ];
 
 export default routes;

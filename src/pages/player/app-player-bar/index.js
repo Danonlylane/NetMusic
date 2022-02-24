@@ -182,7 +182,10 @@ export default memo(function BeiAppPlayerBar() {
                     </div>
                 </Operator>
             </div>
-            <audio ref={audioRef}
+            <audio
+                id="audio"
+                preload="auto"
+                ref={audioRef}
                 onTimeUpdate={e => timeUpdate(e)}
                 onEnded={e => handleMusicEnded()} />
         </PlaybarWrapper>

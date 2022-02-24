@@ -2,7 +2,9 @@
 @import "~antd/dist/antd.css";
 
 /* 样式的重置 */
-body, html, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, header, menu, section, p, input, td, th, ins {
+
+body, html, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, 
+dt, dd, header, menu, section, p, input, td, th, ins {
     padding: 0;
     margin: 0;
   }
@@ -63,6 +65,14 @@ body, html, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, header, menu, sectio
     width: 980px;
     margin: 0 auto;
   }
+
+  .text-indent {
+    text-indent: -9999px;
+  }
+  
+  .inline-block {
+    display: inline-block;
+  }
   
   .sprite_01 {
     background: url(../img/sprite_01.png) no-repeat 0 9999px;
@@ -120,3 +130,19 @@ body, html, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, header, menu, sectio
   }
   
   
+main.content {
+  width: 980px;
+  min-height: 700px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid #d3d3d3;
+  border-width: 0 1px;
+}
+
+.no-link {
+  pointer-events: none;
+}
+
+.m-tab {
+  background: url(../img/tab.png) no-repeat 0 9999px;
+}
