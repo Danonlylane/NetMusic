@@ -10,7 +10,7 @@ import {
   CategoryWrapper
 } from "./style";
 
-export default memo(function HYSongsCategory() {
+export default memo(function BeiSongsCategory() {
   // redux
   const { category } = useSelector(state => ({
     category: state.getIn(["songs", "category"])

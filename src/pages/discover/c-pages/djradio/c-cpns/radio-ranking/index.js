@@ -5,15 +5,15 @@ import {
   getRadios
 } from "../../store/actionCreators";
 
-import HYThemeHeaderNormal from '@/components/theme-header-normal';
-import HYRadioRankingCover from '@/components/radio-ranking-cover';
-import HYPagination from '@/components/pagination';
+import BeiThemeHeaderNormal from '@/components/theme-header-normal';
+import BeiRadioRankingCover from '@/components/radio-ranking-cover';
+import BeiPagination from '@/components/pagination';
 import {
   RankingWraper
 } from "./style";
 import { useState } from 'react';
 
-export default memo(function HYRadioRanking() {
+export default memo(function BeiRadioRanking() {
   // state
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -38,15 +38,15 @@ export default memo(function HYRadioRanking() {
 
   return (
     <RankingWraper>
-      <HYThemeHeaderNormal title="电台排行榜"/>
+      <BeiThemeHeaderNormal title="电台排行榜"/>
       <div className="ranking-list">
         {
           radios.map((item, index) => {
-            return (<HYRadioRankingCover key={item.id} radio={item}/>)
+            return (<BeiRadioRankingCover key={item.id} radio={item}/>)
           })
         }
       </div>
-      <HYPagination currentPage={currentPage} 
+      <BeiPagination currentPage={currentPage} 
                     total={1000} 
                     pageSize={30}
                     onPageChange={onPageChange}/>

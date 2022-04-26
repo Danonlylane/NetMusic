@@ -1,21 +1,16 @@
-// import React, { memo } from 'react';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 
 import { NavLink, Redirect } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
-
 import { headerLinks } from '@/common/local-data';
-// import { SearchOutlined } from '@ant-design/icons/lib/icons';
-// import { Input } from 'antd';
 import { Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
-
 import { getSongDetailAction } from '@/pages/player/store';
 
-
-import { debounce } from '@/utils/format-utils.js';
+// import { debounce } from '@/utils/format-utils.js';
+import { ThrottleEnhanceDebounce } from '@/utils/enhanceDebounce';
 import {
     getSearchSongListAction,
     changeFocusStateAction,
@@ -38,15 +33,24 @@ export default memo(function BeiAppHeader() {
     const showSelectItem = (item, index) => {
         if (index < 3) {
             return (
-                <NavLink to={item.link}>
-                    {item.title}
-                    <i className="sprite_01 icon"></i>
+                <NavLink
+                    key={item.title}
+                    to={item.link}
+                    className="header-item"
+                    activeClassName="link-active"
+                >
+                    <em>{item.title}</em>
+                    <i className="icon"></i>
                 </NavLink>
-            )
+            );
         } else {
-            return <a href={item.link}>{item.title}</a>
+            return (
+                <a href={item.link} key={item.title} className="header-item">
+                    {item.title}
+                </a>
+            );
         }
-    }
+    };
 
     // redux hook
     const dispatch = useDispatch();
@@ -69,14 +73,25 @@ export default memo(function BeiAppHeader() {
     }, [focusState]);
 
     // other function debounce()  函数防抖进行优化
-    const changeInput = debounce((target) => {
+    // const changeInput = debounce((target) => {
+    //     let value = target.value.trim();
+    //     if (value.length < 1) return;
+    //     // 显示下拉框
+    //     dispatch(changeFocusStateAction(true));
+    //     // 发送网络请求
+    //     dispatch(getSearchSongListAction(value));
+    // }, 500);
+
+    // other function 增强版的防抖函数对搜索框进行优化
+    const changeInput = ThrottleEnhanceDebounce((target) => {
         let value = target.value.trim();
         if (value.length < 1) return;
         // 显示下拉框
         dispatch(changeFocusStateAction(true));
         // 发送网络请求
         dispatch(getSearchSongListAction(value));
-    }, 400);
+    }, 500)
+
     // 点击当前item歌曲项
     const changeCurrentSong = (songId, item) => {
         // 放到搜索文本框
@@ -155,24 +170,18 @@ export default memo(function BeiAppHeader() {
         </div>
     );
 
-
-
     // 返回jsx
     return (
         <HeaderWrapper>
             <div className="content wrap-v1">
                 <HeaderLeft>
-                    <a href="#/" className="logo sprite_01">网易云音乐</a>
-                    <div className="select-list">
-                        {
-                            headerLinks.map((item, index) => {
-                                return (
-                                    <div key={item.title} className="select-item">
-                                        {showSelectItem(item, index)}
-                                    </div>
-                                )
-                            })
-                        }
+                    <h1>
+                        <a href="#/" className="logo sprite_01">网易云音乐</a>
+                    </h1>
+                    <div className="header-group">
+                        {headerLinks.map((item, index) => {
+                            return showSelectItem(item, index);
+                        })}
                     </div>
                 </HeaderLeft>
                 <HeaderRight>

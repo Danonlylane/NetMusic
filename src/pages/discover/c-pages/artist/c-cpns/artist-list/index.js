@@ -2,14 +2,14 @@ import React, { memo } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
 
-import HYThemeHeaderNormal from '@/components/theme-header-normal';
-import HYAlphaList from './c-cpns/alpha-list';
-import HYArtistItem from './c-cpns/artist-item';
+import BeiThemeHeaderNormal from '@/components/theme-header-normal';
+import BeiAlphaList from './c-cpns/alpha-list';
+import BeiArtistItem from './c-cpns/artist-item';
 import {
   ArtistListWrapper
 } from './style';
 
-export default memo(function HYArtistList() {
+export default memo(function BeiArtistList() {
   // redux hooks
   const { currentType, artistList } = useSelector(state => ({
     currentType: state.getIn(["artist", "currentType"]),
@@ -18,12 +18,12 @@ export default memo(function HYArtistList() {
 
   return (
     <ArtistListWrapper>
-      <HYThemeHeaderNormal title={currentType.name} />
-      <HYAlphaList/>
+      <BeiThemeHeaderNormal title={currentType.name} />
+      <BeiAlphaList/>
       <div className="artist-list">
         {
           artistList.map((item, index) => {
-            return <HYArtistItem key={item.id} index={index} info={item}/>
+            return <BeiArtistItem key={item.id} index={index} info={item}/>
           })
         }
       </div>

@@ -24,4 +24,6 @@ const BeiPlayer = memo(() => {
     )
 })
 
+
 export default BeiPlayer
+

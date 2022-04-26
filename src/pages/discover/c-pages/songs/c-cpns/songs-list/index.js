@@ -4,13 +4,13 @@ import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { PER_PAGE_NUMBER } from '../../store/constants';
 import { getSongList } from "../../store/actionCreators";
 
-import HYThemeCover from '@/components/theme-cover';
-import HYPagination from '@/components/pagination';
+import BeiThemeCover from '@/components/theme-cover';
+import BeiPagination from '@/components/pagination';
 import {
   SongListWrapper
 } from "./style";
 
-export default memo(function HYSongsList() {
+export default memo(function BeiSongsList() {
   // hooks
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -33,12 +33,12 @@ export default memo(function HYSongsList() {
         {
           songList.map((item, index) => {
             return (
-              <HYThemeCover info={item} key={item.id} right="30px" />
+              <BeiThemeCover info={item} key={item.id} right="30px" />
             )
           })
         }
       </div>
-      <HYPagination currentPage={currentPage} 
+      <BeiPagination currentPage={currentPage} 
                     total={total} 
                     pageSize={PER_PAGE_NUMBER}
                     onPageChange={onPageChange}/>

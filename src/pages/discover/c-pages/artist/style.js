@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const HYArtistWrapper = styled.div`
+export const BeiArtistWrapper = styled.div`
   .content {
     display: flex;
     background-color: #fff;

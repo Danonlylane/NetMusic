@@ -15,7 +15,7 @@ export const SearchWrapper = styled.div`
 
       .ant-input-search {
         border-radius: 8px;
-        height: 42px;
+        height: 32px;
         border-color: #c9c9c9;
         box-shadow: inset 0 0 0 0 #cdcde6,inset 0 0 1px 1px #fff,0 1px 2px 1px rgba(30,35,90,0.4);
       }

@@ -4,7 +4,7 @@ import { getSizeImage } from '@/utils/format-utils';
 
 import { ItemWrapper } from './style';
 
-export default memo(function HYArtistItemV1(props) {
+export default memo(function BeiArtistItemV1(props) {
   const { info, index } = props;
 
   return (

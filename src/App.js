@@ -8,7 +8,6 @@ import routes from './router';
 import store from './store'
 import { Provider } from 'react-redux';
 
-
 // 自定义
 import BeiAppHeader from '@/components/app-header';
 import BeiAppFooter from '@/components/app-footer';

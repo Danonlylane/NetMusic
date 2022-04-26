@@ -1,4 +1,5 @@
 import React, { memo, useState, useEffect, useRef, useCallback } from 'react';
+
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { getSizeImage, formatDate, getPlaySong } from '@/utils/format-utils';
@@ -23,6 +24,7 @@ export default memo(function BeiAppPlayerBar() {
     // props and state
     const [currentTime, setCurrentTime] = useState(0);
     const [progress, setProgress] = useState(0);
+
     const [isChanging, setIsChanging] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -38,6 +40,7 @@ export default memo(function BeiAppPlayerBar() {
         lyricList: state.getIn(["player", "lyricList"]),
         currentLyricIndex: state.getIn(["player", "currentLyricIndex"])
     }), shallowEqual);
+    
     const dispatch = useDispatch();
 
     // other hooks
@@ -125,9 +128,9 @@ export default memo(function BeiAppPlayerBar() {
     }, [duration]);
 
     const sliderAfterChange = useCallback((value) => {
-        const currentTime = value / 100 * duration / 1000;
+        const currentTime = value / 100 * duration;
         audioRef.current.currentTime = currentTime;
-        setCurrentTime(currentTime * 1000);
+        setCurrentTime(currentTime);
         setIsChanging(false);
 
         if (!isPlaying) {

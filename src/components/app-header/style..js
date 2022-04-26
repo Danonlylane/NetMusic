@@ -1,19 +1,20 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
+// 控制header局部样式
 export const HeaderWrapper = styled.div`
-  height: 75px;
+  width: 100%;
+  /* height: 75px; */
+  background-color: #242221;
   font-size: 14px;
-  color: #fff;
-  background-color: #242424;
+
 
   .content {
-    height: 70px;
-
     display: flex;
     justify-content: space-between;
+    /* color: #fff; */
   }
 
-  .divider {
+  .red-line {
     height: 5px;
     background-color: #C20C0C;
   }
@@ -23,90 +24,72 @@ export const HeaderLeft = styled.div`
   display: flex;
 
   .logo {
-    display: block;
+    display: inline-block;
     width: 176px;
     height: 69px;
     background-position: 0 0;
     text-indent: -9999px;
   }
 
-  .select-list {
+  .header-group {
     display: flex;
+    /* color: #ccc; */
+    /* font-size: 14px; */
     line-height: 70px;
-    
-    .select-item {
+
+    .header-item {
       position: relative;
+      padding: 0 19px;
+      height: 70px;
+      text-align: center;
+      line-height: 70px;
+
+      &:hover {
+        color: #fff;
+        text-decoration: none;
+        background-color: #000;
+      }
+
       a {
         display: block;
         padding: 0 20px;
         color: #ccc;
       }
 
-      :last-of-type a {
+      /* hot图标 */
+      :last-of-type a{
         position: relative;
         ::after {
           position: absolute;
-          content: "";
+          content: '';
           width: 28px;
           height: 19px;
-          background-image: url(${require("@/assets/img/sprite_01.png")});
-          background-position: -190px 0;
+          background-image: url(${require('@/assets/img/sprite_01.png')});
+          background-position: -192px 0;
           top: 20px;
-          right: -15px;
+          right: -20px;
         }
       }
+    }
 
-      &:hover a, a.active {
-        color: #fff;
-        background: #000;
-        text-decoration: none;
-      }
-      
-      .active .icon {
+    /* NavLink活跃状态 */
+    .link-active {
+      color: #fff;
+      background-color: #000;
+      /* 下面的小三角 */
+      .icon {
         position: absolute;
-        display: inline-block;
         width: 12px;
         height: 7px;
         bottom: -1px;
         left: 50%;
         transform: translate(-50%, 0);
-        background-position: -226px 0;
+        background-image: url('${require('@/assets/img/sprite_01.png')}');
+        background-position: 254px 0;
       }
     }
   }
 `
-
-// export const HeaderRight = styled.div`
-//   display: flex;
-//   align-items: center;
-//   color: #ccc;
-//   font-size: 12px;
-
-
-//   .search {
-//     width: 158px;
-//     height: 32px;
-//     border-radius: 16px;
-
-//     input {
-//       &::placeholder {
-//         font-size: 12px;
-//       }
-//     }
-//   }
-
-//   .center {
-//     width: 90px;
-//     height: 32px;
-//     line-height: 32px;
-//     text-align: center;
-//     border: 1px solid #666;
-//     border-radius: 16px;
-//     margin: 0 16px;
-//     background-color: transparent;
-//   }
-// `
-
 export const HeaderRight = styled.div`
   display: flex;
   align-items: center;
@@ -270,3 +253,4 @@ export const HeaderRight = styled.div`
     border-radius: 50%;
   }
 `
+

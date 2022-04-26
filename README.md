@@ -100,23 +100,10 @@
    }
    ```
 
-   
-
 4. 重启项目，在路径中使用别名即可。
 
-   比如
 
-   ```
-   
-   ```
 
-   使用别名就很简洁
-
-   ```
-   
-   ```
-
-   
 
 ### 生成目录结构
 
@@ -202,4 +189,437 @@ tree -I "node_modules|build"
 ├── yarn-error.log
 └── yarn.lock
 ```
+
+
+
+### Redux 引入项目
+
+根目录下的整个项目的 store 文件，作用是将所有模块的 store 文件连接起来
+
+>  src/store/index.js
+
+```javascript
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import reducer from './reducer';
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(reducer, composeEnhancers(
+  applyMiddleware(thunk)
+));
+
+export default store;
+```
+
+> netmusic-react/src/store/reducer.js
+
+```javascript
+import { combineReducers } from 'redux-immutable';
+
+import { reducer as recommendReducer } from '../pages/discover/c-pages/recommend/store';
+import { reducer as playerReducer } from '../pages/player/store';
+import { reducer as rankingReducer } from '../pages/discover/c-pages/ranking/store';
+import { reducer as songsReducer } from "../pages/discover/c-pages/songs/store";
+
+import { reducer as djradioReducer } from "../pages/discover/c-pages/djradio/store";
+import { reducer as artistReducer } from "../pages/discover/c-pages/artist/store";
+import { reducer as albumReducer } from "../pages/discover/c-pages/album/store";
+
+
+import { reducer as themeHeaderReducer } from '../components/app-header/store';
+import { reducer as searchReducer } from '../pages/search/store'
+
+
+
+const cReducer = combineReducers({
+  recommend: recommendReducer,
+  player: playerReducer,
+  ranking: rankingReducer,
+  songs: songsReducer,
+  djradio: djradioReducer,
+  artist: artistReducer,
+  album: albumReducer,
+  search: searchReducer,
+  themeHeader: themeHeaderReducer,
+
+});
+
+export default cReducer;
+```
+
+使用 react-redux 中提供的 Provider 组件，将整体的 store 引入根组件
+
+```javascript
+// 引入外部
+import React, { memo, Suspense } from 'react';
+import { renderRoutes } from 'react-router-config';
+
+// 引入功能性
+import routes from './router';
+import store from './store'
+import { Provider } from 'react-redux';
+
+// 自定义
+import BeiAppHeader from '@/components/app-header';
+import BeiAppFooter from '@/components/app-footer';
+import { HashRouter } from 'react-router-dom';
+import BeiAppPlayerBar from './pages/player/app-player-bar';
+
+export default memo(function App() {
+    return (
+        <Provider store={store}>
+            <HashRouter>
+                <BeiAppHeader />
+                <Suspense fallback={<div>page loading</div>}>
+                    {renderRoutes(routes)}
+                </Suspense>
+                <BeiAppFooter />
+                <BeiAppPlayerBar />
+            </HashRouter>
+        </Provider>
+    )
+});
+```
+
+
+
+### 播放栏功能的实现
+
+整个播放栏是一个大的组件
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1mhzgwla0j21mk02yt98.jpg)
+
+结构大致代码如下：
+
+从左到右分为：控制歌曲播放组件、歌曲播放信息组件、其他控制功能组件
+
+```html
+<PlaybarWrapper className="sprite_player">
+            <div className="content wrap-v2">
+                </Control>
+                <PlayInfo>
+                </PlayInfo>
+                <Operator sequence={sequence}>
+                </Operator>
+            </div>
+            <audio
+                id="audio"
+                preload="auto"
+                ref={audioRef}
+                onTimeUpdate={e => timeUpdate(e)}
+                onEnded={e => handleMusicEnded()} />
+</PlaybarWrapper>
+```
+
+获取当前歌曲
+
+```javascript
+// 默认歌曲
+useEffect(() => {
+        dispatch(getSongDetailAction(167876));
+}, [dispatch]);
+
+// 如果当前歌曲发生改变，组件重新渲染，对应的 audio 组件的 src 也发生改变
+useEffect(() => {
+        audioRef.current.src = getPlaySong(currentSong.id);
+        audioRef.current.play().then(res => {
+            setIsPlaying(true);
+        }).catch(err => {
+            setIsPlaying(false);
+        });
+}, [currentSong]);
+```
+
+播放音乐功能：
+
+```javascript
+const playMusic = useCallback(() => {
+        isPlaying ? audioRef.current.pause() : audioRef.current.play();
+        setIsPlaying(!isPlaying);
+}, [isPlaying]);
+```
+
+audio 组件的播放时间改变
+
+```javascript
+const timeUpdate = (e) => {
+        const currentTime = e.target.currentTime;
+        if (!isChanging) {
+            setCurrentTime(currentTime * 1000);
+            setProgress(currentTime * 1000 / duration * 100);
+        }
+}
+```
+
+拖动滑块改变时间，歌曲的播放时间也随之改变
+
+```javascript
+const sliderChange = useCallback((value) => {
+        setIsChanging(true);
+        const currentTime = value / 100 * duration;
+        setCurrentTime(currentTime);
+        setProgress(value);
+    }, [duration]);
+
+const sliderAfterChange = useCallback((value) => {
+        const currentTime = value / 100 * duration;
+        audioRef.current.currentTime = currentTime;
+        setCurrentTime(currentTime);
+        setIsChanging(false);
+
+        if (!isPlaying) {
+            playMusic();
+        }
+    }, [duration, isPlaying, playMusic]);
+```
+
+### 歌曲歌词展示功能的实现
+
+
+
+从 redux 中获取当前的歌曲和歌词到当前组件（歌词在获取当前的歌曲信息时，已经下载到 redux 里面了）
+
+> src/pages/player/app-player-bar/index.js
+
+```javascript
+// redux hook
+    const {
+        currentSong,
+        lyricList,
+        currentLyricIndex
+    } = useSelector(state => ({
+        currentSong: state.getIn(["player", "currentSong"]),
+        lyricList: state.getIn(["player", "lyricList"]),
+        currentLyricIndex: state.getIn(["player", "currentLyricIndex"])
+    }), shallowEqual);
+```
+
+redux 里面获取歌词的 action
+
+```javascript
+export const getLyricAction = (id) => {
+  return dispatch => {
+    getLyric(id).then(res => {
+      const lyric = res.lrc.lyric;
+      const lyricList = parseLyric(lyric);
+      dispatch(changLyricListAction(lyricList));
+    })
+  }
+}
+```
+
+> src/services/player.js
+
+```javascript
+export function getLyric(id) {
+    return request({
+        url: "/lyric",
+        params: {
+            id
+        }
+    })
+}
+```
+
+根据后台返回的数据，对歌词进行解析
+
+> src/utils/parse-lyric.js
+
+```javascript
+const parseExp = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
+
+export function parseLyric(lyricString) {
+  const lineStrings = lyricString.split("\n");
+
+  const lyrics = [];
+  for (let line of lineStrings) {
+    if (line) {
+      const result = parseExp.exec(line);
+      if (!result) continue;
+      const time1 = result[1] * 60 * 1000;
+      const time2 = result[2] * 1000;
+      const time3 = result[3].length === 3? result[3]*1: result[3]*10;
+      const time = time1 + time2 + time3;
+      const content = line.replace(parseExp, "").trim();
+      const lineObj = {time, content};
+      lyrics.push(lineObj);
+    }
+  }
+  return lyrics;
+}
+```
+
+利用时间和下标找到当前时间对应的歌词，将歌词放在 AntDesign 的 message 组件上
+
+```javascript
+ const timeUpdate = (e) => {
+        const currentTime = e.target.currentTime;
+        if (!isChanging) {
+            setCurrentTime(currentTime * 1000);
+            setProgress(currentTime * 1000 / duration * 100);
+        }
+
+        // 获取当前的歌词
+        let i = 0;
+        for (; i < lyricList.length; i++) {
+            let lyricItem = lyricList[i];
+            if (currentTime * 1000 < lyricItem.time) {
+                break;
+            }
+        }
+
+        if (currentLyricIndex !== i - 1) {
+            dispatch(changeCurrentLyricIndexAction(i - 1));
+            const content = lyricList[i - 1] && lyricList[i - 1].content
+            message.open({
+                key: "lyric",
+                content: content,
+                duration: 0,
+                className: "lyric-class"
+            })
+        }
+    }
+```
+
+### 搜索框的实现
+
+使用 AntD 的 input 组件
+
+```javascript
+import { Input } from 'antd';
+```
+
+input 组件的设置
+
+```javascript
+<Input
+            ref={inputRef}
+            className="search "
+            placeholder="音乐/歌手"
+            size="large"
+            prefix={<SearchOutlined />}
+            onChange={(e) => setIsRedirect(false) || setValue(e.target.value)}
+            onInput={({ target }) => changeInput(target)}
+            onFocus={handleFocus}
+            onPressEnter={(e) => handleEnter(e)}
+            value={value}
+            onKeyDown={watchKeyboard}
+            suffix={icons}
+        />
+```
+
+输入框内容变化时的回调：使用受控组价拿到搜索框里面输入的内容，然后使用防抖节流优化发起请求。
+
+```javascript
+// other function 增强版的防抖函数对搜索框进行优化
+    const changeInput = ThrottleEnhanceDebounce((target) => {
+        let value = target.value.trim();
+        if (value.length < 1) return;
+        // 显示下拉框
+        dispatch(changeFocusStateAction(true));
+        // 发送网络请求
+        dispatch(getSearchSongListAction(value));
+    }, 500)
+```
+
+如果聚焦到搜索框：下拉框就显示
+
+```javascript
+<div
+	className="down-slider"
+  style={{ display: focusState ? 'block' : 'none' }}
+>
+```
+
+获取焦点
+
+```javascript
+const handleFocus = useCallback(() => {
+        // 当文本获取焦点时,文本被选中状态
+        inputRef.current.select();
+        // 更改为获取焦点状态
+        dispatch(changeFocusStateAction(true));
+        // 修改状态重定向状态
+        setIsRedirect(false);
+}, [dispatch]);
+```
+
+监控用户是否按: "上"或"下"键
+
+```javascript
+    const watchKeyboard = useCallback(
+        (even) => {
+            let activeNumber = recordActive;
+            if (even.keyCode === 38) {
+                activeNumber--;
+                activeNumber =
+                    activeNumber < 0 ? searchSongList?.length - 1 : activeNumber;
+                setRecordActive(activeNumber);
+            } else if (even.keyCode === 40) {
+                activeNumber++;
+                activeNumber =
+                    activeNumber >= searchSongList?.length ? 0 : activeNumber;
+                setRecordActive(activeNumber);
+            }
+        },
+        [recordActive, setRecordActive, searchSongList]
+    );
+```
+
+监听 enter 键状态：跳转到搜索详情
+
+```javascript
+    const handleEnter = useCallback(
+        (e) => {
+            // 说明当前光标有”高亮当前行“
+            if (recordActive >= 0) {
+                // 保存value
+                setValue(
+                    searchSongList[recordActive].name +
+                    '-' +
+                    searchSongList[recordActive].artists[0].name
+                );
+            }
+            dispatch(changeFocusStateAction(false));
+            // 只要在搜索框回车: 都进行跳转
+            setIsRedirect(true);
+        },
+        [dispatch, recordActive, searchSongList]
+    );
+```
+
+下拉框的实现：自己封装的 hooks
+
+```javascript
+/**
+ * 调用该hook注册全局键盘事件: ctrl+k唤醒搜索框  esc关闭下拉框
+ */
+export function useGlobalKeyboardEvent() {
+  const showDropBoxState = useChangeDropBoxState(true)
+  const closeDropBoxState = useChangeDropBoxState(false)
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'k') {
+      // 阻止默认事件
+      e.preventDefault()
+      showDropBoxState()
+    }
+    if (e.key === 'Escape') {
+      closeDropBoxState()
+    }
+  })
+}
+```
+
+
+
+### 收获的小技巧
+
+1. a 标签的内容以及 SEO 优化：在 a 标签里面，如果写上了文字内容，但是我们又希望这个标签是一个 Logo 图片的话，那么文字内容就是多余的，但是为了搜索引擎能够爬取到关键字，所以文字内容又是必须的，这样的话，可以使用 css 中的 `text-indent: -9999px;` 来将文字内容放到屏幕外面。
+
+```html
+ <a href="#/" className="logo sprite_01">网易云音乐</a>
+```
+
+
 
