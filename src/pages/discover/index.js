@@ -11,7 +11,7 @@ import { DiscoverWrapper, TopMenu } from './style';
 
 export default memo(function BeiDiscover(props) {
     const { route } = props;
-    useGlobalKeyboardEvent()// 全局注册 ctrl+k 唤醒下拉框
+    useGlobalKeyboardEvent()// 全局注册 ctrl+k 唤醒下拉框 2023.02.23在window11测试git
 
 
     return (
