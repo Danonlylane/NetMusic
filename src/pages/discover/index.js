@@ -8,7 +8,7 @@ import { discoverMenu } from "@/common/local-data";
 import { DiscoverWrapper, TopMenu } from './style';
 
 export default memo(function BeiDiscover(props) {
-    const { route } = props;
+    const { route } = props; // test pull request
     
     return (
         <DiscoverWrapper>
